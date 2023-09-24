@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<!--网站头部-->
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="renderer" content="webkit">
+        <meta name="description" content="">
+        <meta name="keywords" content="">
+        <title>在线吗？</title>
+        <!--背景图css-->
+        <style>
+            .msrss-bg { 
+                display: table;
+                background-image: url(./images/maxresdefault.jpg);
+                box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.7);
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                width:100%;
+                min-height: 95vh;
+            }
+            .title {
+                display:table-cell;
+                vertical-align:middle;
+            }
+        </style>
+        <!--css引用-->
+        <link rel="stylesheet" href="./css/bootstrap.min.css" as="style">
+        <!--网站ico图标-->
+        <link href="./favicon.ico" rel="shortcut icon">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">西伯利亚开发团队</a>
+                </div>
+            </nav>
+            <div class="msrss-bg" style="text-align:center">
+                <div class="title">
+                    <h1 style="font-size:4em; color: white">在线吗？</h1>
+                    <h2 style="color: white">Is it online?</h2>
+                    <h3 style="color: paleturquoise">西伯利亚开发团队 出品</h3>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#how">怎么做到的？</button>
+                    <div class="modal fade" id="how" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">怎么做到的？</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                   <s><b>我说我不知道你信吗？</b></s><br>这个网站通过调用<a href="https://mcstatus.io/docs">mcstatus.io</a>的API，并根据API返回的信息来判断服务器是否在线。<br>请注意：服务器<b>必须</b>允许查询（通常是配置文件里的enable-query）！
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">我知道了</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div style="text-align:center">
+                <section id="querying" style="padding: 3% 10%">
+                    <h2>在 线 状 态 查 询</h2>
+                    <div width="100%">
+                        <form id="server" class="needs-validation" novalidate onsubmit="return false">
+                            <label for="address">服务器地址</label>
+                            <input type="text" class="form-control" id="address" placeholder="请输入服务器地址" required>
+                            <div class="invalid-feedback">
+                                请输入有效的服务器地址！
+                            </div>
+                            <input class="form-check-input" type="checkbox" value="" id="isBedrock">
+                            <label class="form-check-label" for="isBedrock">
+                                这是基岩版服务器吗？
+                            </label>
+                            <button type="submit" class="btn btn-primary" id="query">让我看看！</button>
+                            <hr>
+                            <br>
+                            <label for="output">输出信息（调试用）</label>
+                            <textarea rows="10" id="output" class="form-control" spellcheck="false" readonly>
+                                ……
+                            </textarea>
+                        </form>
+                    </div>
+                    <hr>
+                    <div class="alert alert-primary" role="alert" id="status">
+                        <span id="text1">这个服务器在线吗？</span>
+                    </div>
+                    <div>
+                        <h3 style="text-align: left">MOTD预览：</h3>
+                        <div id="motd" class="p-4 w-full" style="text-align: left; background-color: black; color: white; font-size: 1.25em">
+                            
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+        <!--js引用-->
+        <script src="./js/jquery-3.6.0.min.js"></script>
+        <script src="./js/bootstrap.bundle.min.js"></script>
+        <!--验证-->
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                    'use strict'
+                
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.querySelectorAll('.needs-validation')
+                
+                    // Loop over them and prevent submission
+                    Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                
+                        form.classList.add('was-validated')
+                        }, false)
+                    })
+                })() 
+        </script>
+        <!--查询脚本-->
+        <script>
+            async function obfuscation() {
+                setTimeout(function() {
+                    var obf = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[];:<>,./?";
+                    var obfed = document.getElementsByClassName("minecraft-format-obfuscated");
+                    const charactersLength = obf.length;
+                    for (var i = 0; i < obfed.length; i++) {
+                        let result = '';
+                        for (let j = 0; j < obfed[i].innerText.length; j++) {
+                            result += obf.charAt(Math.floor(Math.random() * charactersLength));
+                        }
+                        obfed[i].innerText = result;
+                    }
+                    obfuscation();
+                }, 25);
+            }
+            $("#query").click(function() {
+                var texts = document.querySelectorAll('.needs-validation')
+                for (var i = 0; i < texts.length; i++) {
+                    var textpart = texts[i]
+                    if (textpart.matches(":invalid")) {
+                        break;
+                    }
+                    else if (i + 1 == texts.length) {
+                        var address = $("#address").val();
+                        $("#status").attr('class', 'alert alert-warning');
+                        $('#text1').text("正在查询……");
+                        if (document.getElementById('isBedrock').checked) {
+                            $.ajax(
+                                {
+                                    type: "GET", url: "https://api.mcstatus.io/v2/status/bedrock/"+address, dataType: "JSON"
+                                }
+                            ).done(function(data) {
+                                var response = JSON.stringify(data, undefined, 4);
+                                if(data.online == true) {
+                                    $("#status").attr('class', 'alert alert-success');
+                                    $('#text1').text("这个服务器是在线的！");
+                                    $("#output").text(response);
+                                    $("#motd").html(data.motd.html.replace(/\n/g,"<br>"));
+                                    if ($(".minecraft-format-obfuscated")[0]) {
+                                        obfuscation();
+                                    }
+                                } else {
+                                    $("#status").removeClass();
+                                    $("#status").attr('class', 'alert alert-danger');
+                                    $('#text1').text("这个服务器不是在线的！（或者不是Minecraft Bedrock Edition服务器）");
+                                    $("#output").text(response);
+                                }
+                            }).fail(function(data) {
+                                $("#status").attr('class', 'alert alert-danger');
+                                $('#text1').text("发生了API错误！");
+                            }
+                        )
+                    } else {
+                        $.ajax(
+                                {
+                                    type: "GET", url: "https://api.mcstatus.io/v2/status/java/"+address, dataType: "JSON"
+                                }
+                            ).done(function(data) {
+                                var response = JSON.stringify(data, undefined, 4);
+                                if(data.online == true) {
+                                    $("#status").attr('class', 'alert alert-success');
+                                    $('#text1').text("这个服务器是在线的！");
+                                    $("#output").text(response);
+                                    $("#motd").html(data.motd.html.replace(/\n/g,"<br>"));
+                                    if ($(".minecraft-format-obfuscated")[0]) {
+                                        obfuscation();
+                                    }
+                                } else {
+                                    $("#status").attr('class', 'alert alert-danger');
+                                    $('#text1').text("这个服务器不是在线的！（或者不是Minecraft Java Edition服务器）");
+                                    $("#output").text(response);
+                                }
+                            }).fail(function(data) {
+                                $("#status").attr('class', 'alert alert-danger');
+                                $('#text1').text("发生了API错误！");
+                            })
+                        }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
